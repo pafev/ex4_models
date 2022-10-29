@@ -5,5 +5,8 @@ FactoryBot.define do
     password { "MyString" }
     credit_wallet { 1 }
     is_admin { false }
+    trait :admin do
+      is_admin { true }
+    end
   end
 end
