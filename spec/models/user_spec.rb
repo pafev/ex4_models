@@ -32,6 +32,6 @@ RSpec.describe User, type: :model do
   end
 
   context "trait :admin is ok" do
-    expect(build(:user, :admin).is_admin).to eq(true)
+     it {expect(build(:user, :admin).is_admin).to eq(true)}
   end
 end
