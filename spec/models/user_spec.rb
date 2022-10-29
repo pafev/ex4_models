@@ -30,4 +30,10 @@ RSpec.describe User, type: :model do
       expect(build(:user, password: nil)).to be_invalid
     end
   end
+
+  context "testing is_admin" do
+    it "is_admin shouldn't be nil" do
+      expect(build(:user, is_admin: nil)).to be_invalid
+    end
+  end
 end
