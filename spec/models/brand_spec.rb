@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Brand, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "Testing name:" do
+    it "name shouldn't be nil" do
+      expect(build(:brand, name: nil)).to be_invalid
+    end
+  end
 end
