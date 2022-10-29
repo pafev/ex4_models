@@ -24,4 +24,10 @@ RSpec.describe User, type: :model do
       expect(build(:user, name: 'bb', email:'example@email.com')).to be_invalid
     end
   end
+
+  context "testing password" do
+    it "password shouldn't be nil" do
+      expect(build(:user, password: nil)).to be_invalid
+    end
+  end
 end
