@@ -1,5 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "testing factory" do
+    it {expect(build(:category)).to be_valid}
+  end
 end
