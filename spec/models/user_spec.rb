@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   context "testing factory" do
-    it {expect(build(:user)).to be_valid}
+    it { expect(build(:user)).to be_valid }
   end
 
   context "testing name" do
@@ -31,9 +31,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "testing is_admin" do
-    it "is_admin shouldn't be nil" do
-      expect(build(:user, is_admin: nil)).to be_invalid
-    end
+  context "trait :admin is ok" do
+    expect(build(:user, :admin).is_admin).to eq(true)
   end
 end
