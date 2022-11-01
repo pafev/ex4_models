@@ -4,6 +4,7 @@ namespace "api" do
   namespace "v1" do
     scope "categories" do
       get "index", to: "categories#index"
+      get "show/:id", to: "categories#show"
     end
   end
 end
