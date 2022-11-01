@@ -5,6 +5,7 @@ namespace "api" do
     scope "categories" do
       get "index", to: "categories#index"
       get "show/:id", to: "categories#show"
+      post "create", to: "categories#create"
     end
   end
 end
