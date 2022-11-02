@@ -23,6 +23,13 @@ class Api::V1::CategoriesController < ApplicationController
     rescue StandardError => e
         render json: e, status: :bad_request
     end
+    def delete
+        category = Category.find(params[:id])
+        category.destroy!
+        render json: { message: "Categoria #{category.name} destruída com sucesso" }
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
 
     private
     def category_params
