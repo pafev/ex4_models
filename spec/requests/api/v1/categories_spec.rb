@@ -31,7 +31,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
         expect(response.body).to eq(category.to_json)
       end
     end
-    context "id doens't exist, so return http status bad_request" do
+    context "id doesn't exist, so return http status bad_request" do
       before do
         get "/api/v1/categories/show/-1"
       end
