@@ -18,7 +18,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
   end
 
-  describe 'GET /show' do
+  describe "GET /show" do
     let(:category) {create(:category)}
     context 'id exist, so' do
       before do
@@ -36,6 +36,31 @@ RSpec.describe "Api::V1::Categories", type: :request do
         get "/api/v1/categories/show/-1"
       end
       it {expect(response).to have_http_status(:bad_request)}
+    end
+  end
+
+  describe "POST /create" do
+    context "when params are ok," do
+      let(:category_params) {attributes_for(:category)}
+      before do
+        post "/api/v1/categories/create", params: {category: category_params}
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:created)
+      end
+      it "category should be uniq" do
+        post "/api/v1/categories/create", params: {category: category_params}
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "when params aren't ok" do
+      category_params = nil
+      before do
+        post "/api/v1/categories/create", params: {category: category_params}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
     end
   end
 end
