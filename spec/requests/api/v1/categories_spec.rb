@@ -14,21 +14,28 @@ RSpec.describe "Api::V1::Categories", type: :request do
       it { expect(response.content_type).to eq('application/json; charset=utf-8') }
     end
     context 'return the created instances' do
-      it { expect(JSON.parse(response.body)).to eq([
-        {
-          'id' => 1,
-          'name' => 'Automóveis',
-          'created_at' => eval(Category.find(1).created_at.to_json),
-          'updated_at' => eval(Category.find(1).updated_at.to_json)
-        },
-        {
-          'id' => 2,
-          'name' => 'Utensílios de Cozinha',
-          'created_at' => eval(Category.find(2).created_at.to_json),
-          'updated_at' => eval(Category.find(2).updated_at.to_json)
-        }
-      ])
-      }
+      it { expect(response.body).to eq(Category.all.to_json) }
+    end
+  end
+
+  describe 'GET /show' do
+    let(:category) {create(:category)}
+    context 'id exist, so' do
+      before do
+        get "/api/v1/categories/show/#{category.id}"
+      end
+      it 'return http status ok' do
+        expect(response).to have_http_status(:ok)
+      end
+      it 'return the correct instance' do
+        expect(response.body).to eq(category.to_json)
+      end
+    end
+    context "id doens't exist, so return http status bad_request" do
+      before do
+        get "/api/v1/categories/show/-1"
+      end
+      it {expect(response).to have_http_status(:bad_request)}
     end
   end
 end
