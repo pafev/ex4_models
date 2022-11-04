@@ -9,6 +9,9 @@ namespace "api" do
       patch "update/:id", to: "categories#update"
       delete "delete/:id", to: "categories#delete"
     end
+    scope "brands" do
+      get "index", to: "brands#index"
+    end
   end
 end
 end
