@@ -65,4 +65,43 @@ RSpec.describe "Api::V1::Brands", type: :request do
       end
     end
   end
+
+  describe "PATCH /update" do
+    let(:brand) {create(:brand)}
+    let(:brand2) {create(:brand, name: 'Gucci')}
+    context "id exists and params are ok" do
+      it "return http status ok" do
+        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: 'Pollo'}}
+        expect(response).to have_http_status(:ok)
+      end
+      it "brand should be uniq" do
+        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: brand2.name}}
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "id exists and params aren't ok" do
+      before do
+        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: nil}}
+      end
+      it "brand's name shouldn't be nil" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "id doesn't exist and param are ok" do
+      before do
+        patch "/api/v1/brands/update/-1", params: {brand: {name: 'Pollo'}}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "id doesn't exist and params aren't ok" do
+      before do
+        patch "/api/v1/brands/update/-1", params: {brand: {name: nil}}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
 end
