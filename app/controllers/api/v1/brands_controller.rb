@@ -16,6 +16,13 @@ class Api::V1::BrandsController < ApplicationController
     rescue StandardError => e
         render json: e, status: :bad_request
     end
+    def update
+        brand = Brand.find(params[:id])
+        brand.update!(brand_params)
+        render json: brand, status: :ok
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
 
     private
     def brand_params
