@@ -9,4 +9,16 @@ class Api::V1::ProductsController < ApplicationController
     rescue StandardError => e
         render json: e, status: :not_found
     end
+    def create
+        product = Product.new(product_params)
+        product.save!
+        render json: product, status: :created
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
+
+    private
+    def product_params
+        params.require(:product).permit(:name, :description, :price, :stock_quantity, :brand_id, :category_id)
+    end
 end

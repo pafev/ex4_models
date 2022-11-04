@@ -19,6 +19,7 @@ namespace "api" do
     scope "products" do
       get "index", to: "products#index"
       get "show/:id", to: "products#show"
+      post "create", to: "products#create"
     end
   end
 end
