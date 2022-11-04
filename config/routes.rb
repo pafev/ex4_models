@@ -11,6 +11,7 @@ namespace "api" do
     end
     scope "brands" do
       get "index", to: "brands#index"
+      get "show/:id", to: "brands#show"
     end
   end
 end
