@@ -40,4 +40,29 @@ RSpec.describe "Api::V1::Brands", type: :request do
       end
     end
   end
+
+  describe "POST /create" do
+    let(:brand_params) {attributes_for(:brand)}
+    context "params are ok" do
+      before do
+        post "/api/v1/brands/create", params: {brand: brand_params}
+      end
+      it "return http status created" do
+        expect(response).to have_http_status(:created)
+      end
+      it "brand should be uniq" do
+        post "/api/v1/brands/create", params: {brand: brand_params}
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "params aren't ok" do
+      brand_params = nil
+      before do
+        post "/api/v1/brands/create", params: {brand: brand_params}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
 end
