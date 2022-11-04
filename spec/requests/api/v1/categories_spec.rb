@@ -63,4 +63,47 @@ RSpec.describe "Api::V1::Categories", type: :request do
       end
     end
   end
+
+  describe "PATCH /update" do
+    let(:category) {create(:category)}
+    context "id exists and params are ok" do
+      before do
+        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: 'Maquiagens'}}
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+    context "id doesn't exist and params are ok" do
+      before do
+        patch "/api/v1/categories/update/-1", params: {category: {name: 'Maquiagens'}}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "id exists and params aren't ok" do
+      before do
+        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: nil}}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "id doesn't exist and params aren't ok" do
+      before do
+        patch "/api/v1/categories/update/-1", params: {category: nil}
+      end
+      it "return http status bad_request" do
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "category's name should be uniq" do
+      let(:category2) {create(:category, name: 'Decoração')}
+      it {
+        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: category2.name}}
+        expect(response).to have_http_status(:bad_request)
+      }
+    end
+  end
 end
