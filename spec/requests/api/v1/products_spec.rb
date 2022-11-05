@@ -122,4 +122,28 @@ RSpec.describe "Api::V1::Products", type: :request do
       end
     end
   end
+
+  describe "DELETE /delete" do
+    context "id exists" do
+      let(:brand) {create(:brand)}
+      let(:category) {create(:category)}
+      let(:product) {create(:product, brand_id: brand.id, category_id: category.id)}
+      before do
+        delete "/api/v1/products/delete/#{product.id}"
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+      it "remove correctly the instance" do
+        get "/api/v1/products/show/#{product.id}"
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+    context "id doesn't exist" do
+      it "return http status not_found" do
+        delete "/api/v1/products/delete/-1"
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
