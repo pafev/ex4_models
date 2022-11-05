@@ -23,6 +23,13 @@ class Api::V1::ProductsController < ApplicationController
     rescue StandardError => e
         render json: e, status: :bad_request
     end
+    def delete
+        product = Product.find(params[:id])
+        product.destroy!
+        render json: {message: "O produto #{product.name} foi destruído com sucesso"}, status: :ok
+    rescue StandardError => e
+        render json: e, status: :not_found
+    end
 
     private
     def product_params

@@ -21,6 +21,7 @@ namespace "api" do
       get "show/:id", to: "products#show"
       post "create", to: "products#create"
       patch "update/:id", to: "products#update"
+      delete "delete/:id", to: "products#delete"
     end
   end
 end
