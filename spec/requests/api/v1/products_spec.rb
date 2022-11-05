@@ -92,4 +92,34 @@ RSpec.describe "Api::V1::Products", type: :request do
       end
     end
   end
+
+  describe "PATCH /update" do
+    let(:brand) {create(:brand)}
+    let(:category) {create(:category)}
+    let(:product) {create(:product, name: "Audi R8", brand_id: brand.id, category_id: category.id)}
+    let(:product_params) {{product: {name: "McLaren", price: 100000000, stock_quantity: 1}}}
+    context "id exists and params are ok" do
+      it "return http status ok" do
+        patch "/api/v1/products/update/#{product.id}", params: product_params
+        expect(response).to have_http_status(:ok)
+      end
+    end
+    context "id doesn't exist and params are ok" do
+      it "return http status bad_request" do
+        patch "/api/v1/products/update/-1", params: product_params
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+    context "id exists and params aren't ok" do
+      let(:product2) {create(:product, name: "Fusca Azul", brand_id: brand.id, category_id: category.id)}
+      it "return http status bad_request" do
+        patch "/api/v1/products/update/#{product.id}", params: nil
+        expect(response).to have_http_status(:bad_request)
+      end
+      it "name should be uniq" do
+        patch "/api/v1/products/update/#{product.id}", params: {product: {name: product2.name}}
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
 end
