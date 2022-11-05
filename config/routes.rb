@@ -20,6 +20,7 @@ namespace "api" do
       get "index", to: "products#index"
       get "show/:id", to: "products#show"
       post "create", to: "products#create"
+      patch "update/:id", to: "products#update"
     end
   end
 end

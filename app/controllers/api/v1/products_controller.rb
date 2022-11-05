@@ -16,6 +16,13 @@ class Api::V1::ProductsController < ApplicationController
     rescue StandardError => e
         render json: e, status: :bad_request
     end
+    def update
+        product = Product.find(params[:id])
+        product.update!(product_params)
+        render json: product, status: :ok
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
 
     private
     def product_params
