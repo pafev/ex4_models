@@ -16,4 +16,27 @@ RSpec.describe "Api::V1::Carts", type: :request do
       end
     end
   end
+
+  describe "DELETE /delete" do
+    context "id exists" do
+    let(:user) {create(:user, email: "example@email")}
+    let(:cart) {create(:cart, user_id: user.id)}
+      before do 
+        delete "/api/v1/carts/delete/#{cart.id}"
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+      it "remove the instance correctly" do
+        delete "/api/v1/carts/delete/#{cart.id}"
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+    context "id doesn't exist" do
+      it "return http status not_found" do
+        delete "/api/v1/carts/delete/-1"
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
