@@ -1,4 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
+    acts_as_token_authentication_handler_for User, only: [:create, :update, :delete]
+
     def index
         products = Product.all
         render json: products, status: :ok
@@ -10,23 +12,35 @@ class Api::V1::ProductsController < ApplicationController
         render json: e, status: :not_found
     end
     def create
-        product = Product.new(product_params)
-        product.save!
-        render json: product, status: :created
+        if current_user.is_admin
+            product = Product.new(product_params)
+            product.save!
+            render json: product, status: :created
+        else
+            render json: {message: "Você não tem permissão para isso"}, status: :ok
+        end
     rescue StandardError => e
         render json: e, status: :bad_request
     end
     def update
-        product = Product.find(params[:id])
-        product.update!(product_params)
-        render json: product, status: :ok
+        if current_user.is_admin
+            product = Product.find(params[:id])
+            product.update!(product_params)
+            render json: product, status: :ok
+        else
+            render json: {message: "Você não tem permissão para isso"}, status: :ok
+        end
     rescue StandardError => e
         render json: e, status: :bad_request
     end
     def delete
-        product = Product.find(params[:id])
-        product.destroy!
-        render json: {message: "O produto #{product.name} foi destruído com sucesso"}, status: :ok
+        if current_user.is_admin
+            product = Product.find(params[:id])
+            product.destroy!
+            render json: {message: "O produto #{product.name} foi destruído com sucesso"}, status: :ok
+        else
+            render json: {message: "Você não tem permissão para isso"}, status: :ok
+        end
     rescue StandardError => e
         render json: e, status: :not_found
     end

@@ -1,4 +1,6 @@
 class Api::V1::BrandsController < ApplicationController
+    acts_as_token_authentication_handler_for User, only: [:create, :update, :delete]
+    
     def index
         brands = Brand.all
         render json: brands, status: :ok
@@ -10,23 +12,35 @@ class Api::V1::BrandsController < ApplicationController
         render json: e, status: :not_found
     end
     def create
-        brand = Brand.new(brand_params)
-        brand.save!
-        render json: brand, status: :created
+        if current_user.is_admin
+            brand = Brand.new(brand_params)
+            brand.save!
+            render json: brand, status: :created
+        else
+            render json: {message: "Você não tem permissão para isso"}, status: :ok
+        end
     rescue StandardError => e
         render json: e, status: :bad_request
     end
     def update
-        brand = Brand.find(params[:id])
-        brand.update!(brand_params)
-        render json: brand, status: :ok
+        if current_user.is_admin
+            brand = Brand.find(params[:id])
+            brand.update!(brand_params)
+            render json: brand, status: :ok
+        else
+            render json: {message: "Você não tem permissão para isso"}, status: :ok
+        end
     rescue StandardError => e
         render json: e, status: :bad_request
     end
     def delete
-        brand = Brand.find(params[:id])
-        brand.destroy!
-        render json: {message: "Marca #{brand.name} destruída com sucesso!"}, status: :ok
+        if current_user.is_admin
+            brand = Brand.find(params[:id])
+            brand.destroy!
+            render json: {message: "Marca #{brand.name} destruída com sucesso!"}, status: :ok
+        else
+            render json: {message: "Você não tem permissão para isso"}, status: :ok
+        end
     rescue StandardError => e
         render json: e, status: :not_found
     end
