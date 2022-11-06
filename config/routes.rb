@@ -5,6 +5,7 @@ namespace "api" do
   namespace "v1" do
     scope "users" do
       get "login", to: "users#login"
+      get "logout", to: "users#logout"
     end
     scope "categories" do
       get "index", to: "categories#index"
