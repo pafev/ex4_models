@@ -24,6 +24,10 @@ namespace "api" do
       patch "update/:id", to: "products#update"
       delete "delete/:id", to: "products#delete"
     end
+    scope "carts" do
+      post "create", to: "carts#create"
+      delete "delete/:id", to: "carts#delete"
+    end
   end
 end
 end
