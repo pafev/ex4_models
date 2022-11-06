@@ -1,4 +1,6 @@
 class Api::V1::CartsController < ApplicationController
+    acts_as_token_authentication_handler_for User
+    
     def create
         cart = Cart.new(cart_params)
         cart.save!
