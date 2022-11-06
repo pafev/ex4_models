@@ -15,6 +15,12 @@ class Api::V1::CartsController < ApplicationController
     rescue StandardError => e
         render json: e, status: :not_found
     end
+    def view
+        cart = current_user.cart
+        render json: cart, status: :ok
+    rescue StandardError => e
+        render json: e, status: :not_found
+    end
 
     private
     def cart_params

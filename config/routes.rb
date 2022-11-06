@@ -31,6 +31,7 @@ namespace "api" do
     scope "carts" do
       post "create", to: "carts#create"
       delete "delete/:id", to: "carts#delete"
+      get "view", to: "carts#view"
     end
   end
 end
