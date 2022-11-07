@@ -22,4 +22,13 @@ RSpec.describe "Api::V1::Users", type: :request do
       end
     end
   end
+
+  describe "GET /logout" do
+    context "user was logged in, so" do
+      it "return http status ok" do
+        get "/api/v1/users/logout", headers: {'X-User-Email': user.email, 'X-User-Token': user.authentication_token}
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
 end

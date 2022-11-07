@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
     def logout
         current_user.authentication_token = nil
         current_user.save!
-        head(:ok)
+        render json: {message: "Usuário #{current_user.name} (#{current_user.email}) deslogado com sucesso"}, status: :ok
     rescue StandardError => e
         render json: e, status: :bad_request
     end
