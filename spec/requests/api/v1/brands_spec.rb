@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Brands", type: :request do
+  let(:user) {create(:user, :admin)}
+  let(:authentication_params) {{
+    'X-User-Email': user.email, 
+    'X-User-Token': user.authentication_token
+    }
+  }
   describe "GET /index" do
     before do
       create(:brand, id: 1, name: 'Pandora')
@@ -45,20 +51,20 @@ RSpec.describe "Api::V1::Brands", type: :request do
     let(:brand_params) {attributes_for(:brand)}
     context "params are ok" do
       before do
-        post "/api/v1/brands/create", params: {brand: brand_params}
+        post "/api/v1/brands/create", params: {brand: brand_params}, headers: authentication_params
       end
       it "return http status created" do
         expect(response).to have_http_status(:created)
       end
       it "brand should be uniq" do
-        post "/api/v1/brands/create", params: {brand: brand_params}
+        post "/api/v1/brands/create", params: {brand: brand_params}, headers: authentication_params
         expect(response).to have_http_status(:bad_request)
       end
     end
     context "params aren't ok" do
       brand_params = nil
       before do
-        post "/api/v1/brands/create", params: {brand: brand_params}
+        post "/api/v1/brands/create", params: {brand: brand_params}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -71,17 +77,17 @@ RSpec.describe "Api::V1::Brands", type: :request do
     let(:brand2) {create(:brand, name: 'Gucci')}
     context "id exists and params are ok" do
       it "return http status ok" do
-        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: 'Pollo'}}
+        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: 'Pollo'}}, headers: authentication_params
         expect(response).to have_http_status(:ok)
       end
       it "brand should be uniq" do
-        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: brand2.name}}
+        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: brand2.name}}, headers: authentication_params
         expect(response).to have_http_status(:bad_request)
       end
     end
     context "id exists and params aren't ok" do
       before do
-        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: nil}}
+        patch "/api/v1/brands/update/#{brand.id}", params: {brand: {name: nil}}, headers: authentication_params
       end
       it "brand's name shouldn't be nil" do
         expect(response).to have_http_status(:bad_request)
@@ -89,7 +95,7 @@ RSpec.describe "Api::V1::Brands", type: :request do
     end
     context "id doesn't exist and param are ok" do
       before do
-        patch "/api/v1/brands/update/-1", params: {brand: {name: 'Pollo'}}
+        patch "/api/v1/brands/update/-1", params: {brand: {name: 'Pollo'}}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -97,7 +103,7 @@ RSpec.describe "Api::V1::Brands", type: :request do
     end
     context "id doesn't exist and params aren't ok" do
       before do
-        patch "/api/v1/brands/update/-1", params: {brand: {name: nil}}
+        patch "/api/v1/brands/update/-1", params: {brand: {name: nil}}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -109,7 +115,7 @@ RSpec.describe "Api::V1::Brands", type: :request do
     let(:brand) {create(:brand)}
     context "id exists" do
       before do
-        delete "/api/v1/brands/delete/#{brand.id}"
+        delete "/api/v1/brands/delete/#{brand.id}", headers: authentication_params
       end
       it "return http status ok" do
         expect(response).to have_http_status(:ok)
@@ -121,7 +127,7 @@ RSpec.describe "Api::V1::Brands", type: :request do
     end
     context "id doesn't exist" do
       before do
-        delete "/api/v1/brands/delete/-1"
+        delete "/api/v1/brands/delete/-1", headers: authentication_params
       end
       it "return http status not_found" do
         expect(response).to have_http_status(:not_found)

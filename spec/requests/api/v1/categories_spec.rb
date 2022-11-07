@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Categories", type: :request do
+  let(:user) {create(:user, :admin)}
+  let(:authentication_params) {{
+    'X-User-Email': user.email, 
+    'X-User-Token': user.authentication_token
+    }
+  }
   describe "GET /index" do
     before do
       create(:category, id: 1, name: 'Automóveis')
@@ -43,20 +49,20 @@ RSpec.describe "Api::V1::Categories", type: :request do
     context "when params are ok," do
       let(:category_params) {attributes_for(:category)}
       before do
-        post "/api/v1/categories/create", params: {category: category_params}
+        post "/api/v1/categories/create", params: {category: category_params}, headers: authentication_params
       end
       it "return http status ok" do
         expect(response).to have_http_status(:created)
       end
       it "category should be uniq" do
-        post "/api/v1/categories/create", params: {category: category_params}
+        post "/api/v1/categories/create", params: {category: category_params}, headers: authentication_params
         expect(response).to have_http_status(:bad_request)
       end
     end
     context "when params aren't ok" do
       category_params = nil
       before do
-        post "/api/v1/categories/create", params: {category: category_params}
+        post "/api/v1/categories/create", params: {category: category_params}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -68,7 +74,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
     let(:category) {create(:category)}
     context "id exists and params are ok" do
       before do
-        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: 'Maquiagens'}}
+        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: 'Maquiagens'}}, headers: authentication_params
       end
       it "return http status ok" do
         expect(response).to have_http_status(:ok)
@@ -76,7 +82,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
     context "id doesn't exist and params are ok" do
       before do
-        patch "/api/v1/categories/update/-1", params: {category: {name: 'Maquiagens'}}
+        patch "/api/v1/categories/update/-1", params: {category: {name: 'Maquiagens'}}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -84,7 +90,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
     context "id exists and params aren't ok" do
       before do
-        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: nil}}
+        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: nil}}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -92,7 +98,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
     context "id doesn't exist and params aren't ok" do
       before do
-        patch "/api/v1/categories/update/-1", params: {category: nil}
+        patch "/api/v1/categories/update/-1", params: {category: nil}, headers: authentication_params
       end
       it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
@@ -101,7 +107,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
     context "category's name should be uniq" do
       let(:category2) {create(:category, name: 'Decoração')}
       it {
-        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: category2.name}}
+        patch "/api/v1/categories/update/#{category.id}", params: {category: {name: category2.name}}, headers: authentication_params
         expect(response).to have_http_status(:bad_request)
       }
     end
@@ -111,13 +117,13 @@ RSpec.describe "Api::V1::Categories", type: :request do
     let(:category) {create(:category)}
     context "id exists" do
       before do
-        delete "/api/v1/categories/delete/#{category.id}"
+        delete "/api/v1/categories/delete/#{category.id}", headers: authentication_params
       end
       it {expect(response).to have_http_status(:ok)}
     end
     context "id doesn't exist" do
       before do
-        delete "/api/v1/categories/delete/-1"
+        delete "/api/v1/categories/delete/-1", headers: authentication_params
       end
       it {expect(response).to have_http_status(:bad_request)}
     end
