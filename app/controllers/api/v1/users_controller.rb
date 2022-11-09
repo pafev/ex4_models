@@ -1,6 +1,14 @@
 class Api::V1::UsersController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:logout]
+    acts_as_token_authentication_handler_for User, only: [:logout, :index]
     
+    def index
+        if current_user.is_admin
+            users = User.all
+            render json: users, status: :ok
+        else
+            render json:{message: "Você não tem permissão para isso"}, status: :unauthorized
+        end
+    end
     def login
         user = User.find_by!(email: params[:email])
         if user.valid_password?(params[:password])
