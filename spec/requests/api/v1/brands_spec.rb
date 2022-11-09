@@ -20,7 +20,7 @@ RSpec.describe "Api::V1::Brands", type: :request do
       it {expect(response.content_type).to eq('application/json; charset=utf-8')}
     end
     context "return the created instances" do
-      it {expect(response.body).to eq(Brand.all.to_json)}
+      it {expect(response.body).to eq("[{\"id\":1,\"name\":\"Pandora\",\"logo_url\":null},{\"id\":2,\"name\":\"Pollo\",\"logo_url\":null}]")}
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe "Api::V1::Brands", type: :request do
         expect(response).to have_http_status(:ok)
       end
       it "return the correct instance" do
-        expect(response.body). to eq(brand.to_json)
+        expect(response.body). to eq("{\"id\":#{brand.id},\"name\":\"#{brand.name}\",\"logo_url\":null}")
       end
     end
     context "id doesn't exist" do

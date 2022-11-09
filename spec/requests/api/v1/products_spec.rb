@@ -11,8 +11,8 @@ RSpec.describe "Api::V1::Products", type: :request do
     before do
       create(:brand, id: 1)
       create(:category, id: 1)
-      create(:product, name: 'Galaxy A12', brand_id: 1, category_id: 1)
-      create(:product, name: 'Moto G10', brand_id: 1, category_id: 1)
+      create(:product, id: 1, name: 'Galaxy A12', brand_id: 1, category_id: 1)
+      create(:product, id: 2, name: 'Moto G10', brand_id: 1, category_id: 1)
       get "/api/v1/products/index"
     end
     context "return http status ok" do
@@ -22,7 +22,7 @@ RSpec.describe "Api::V1::Products", type: :request do
       it {expect(response.content_type).to eq('application/json; charset=utf-8')}
     end
     context "return the created instances" do
-      it {expect(response.body).to eq(Product.all.to_json)}
+      it {expect(response.body).to eq("[{\"id\":1,\"name\":\"Galaxy A12\",\"description\":\"MyString\",\"price\":1,\"stock_quantity\":1,\"brand\":\"MyString\",\"category\":\"MyString\",\"images_url\":[]},{\"id\":2,\"name\":\"Moto G10\",\"description\":\"MyString\",\"price\":1,\"stock_quantity\":1,\"brand\":\"MyString\",\"category\":\"MyString\",\"images_url\":[]}]")}
     end
   end
 
@@ -40,7 +40,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         expect(response).to have_http_status(:ok)
       end
       it "return the correct instance" do
-        expect(response.body).to eq(product.to_json)
+        expect(response.body).to eq("{\"id\":#{product.id},\"name\":\"#{product.name}\",\"description\":\"#{product.description}\",\"price\":#{product.price},\"stock_quantity\":#{product.stock_quantity},\"brand\":\"MyString\",\"category\":\"MyString\",\"images_url\":[]}")
       end
     end
     context "id doesn't exist" do

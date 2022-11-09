@@ -20,7 +20,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
       it { expect(response.content_type).to eq('application/json; charset=utf-8') }
     end
     context 'return the created instances' do
-      it { expect(response.body).to eq(Category.all.to_json) }
+      it { expect(response.body).to eq("[{\"id\":1,\"name\":\"Automóveis\"},{\"id\":2,\"name\":\"Utensílios de Cozinha\"}]") }
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
         expect(response).to have_http_status(:ok)
       end
       it 'return the correct instance' do
-        expect(response.body).to eq(category.to_json)
+        expect(response.body).to eq("{\"id\":#{category.id},\"name\":\"#{category.name}\"}")
       end
     end
     context "id doesn't exist, so return http status bad_request" do
