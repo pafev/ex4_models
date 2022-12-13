@@ -4,7 +4,7 @@ FactoryBot.define do
     description { "MyString" }
     price { 1 }
     stock_quantity { 1 }
-    brand { nil }
-    category { nil }
+    brand { association(:brand) }
+    category { association(:category) }
   end
 end
