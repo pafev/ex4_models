@@ -26,4 +26,10 @@ RSpec.describe Product, type: :model do
       expect(build(:product, stock_quantity: nil)).to be_invalid
     end
   end
+
+  context 'testing description' do
+    it "description shouldn't be nil" do
+      expect(build(:product, description: nil)).to be_invalid
+    end
+  end
 end
