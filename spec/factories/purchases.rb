@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :purchase do
-    cart { nil }
-    product { nil }
+    cart { association(:cart) }
+    product { association(:product) }
   end
 end
