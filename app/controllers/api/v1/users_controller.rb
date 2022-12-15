@@ -7,6 +7,16 @@ class Api::V1::UsersController < ApplicationController
         render json: users, status: :ok
     end
 
+    def create
+        user = User.new(user_params)
+        user.save!
+        cart = Cart.new(user_id: user.id)
+        cart.save!
+        render json: user, status: :created
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
+
     def login
         user = User.find_by!(email: params[:email])
         if user.valid_password?(params[:password])

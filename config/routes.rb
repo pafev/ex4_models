@@ -7,6 +7,7 @@ namespace "api" do
       get "login", to: "users#login"
       get "logout", to: "users#logout"
       get "index", to: "users#index"
+      post "create", to: "users#create"
     end
     scope "categories" do
       get "index", to: "categories#index"
