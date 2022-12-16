@@ -15,8 +15,8 @@ RSpec.describe "Api::V1::Categories", type: :request do
   
   describe "GET /index" do
     before do
-      # create(:category, id: 1, name: 'Automóveis')
-      # create(:category, id: 2, name: 'Utensílios de Cozinha')
+      create(:category, id: 1, name: 'Automóveis')
+      create(:category, id: 2, name: 'Utensílios de Cozinha')
       get '/api/v1/categories/index'
     end
 
@@ -27,13 +27,16 @@ RSpec.describe "Api::V1::Categories", type: :request do
     context 'return a json' do
       it { expect(response.content_type).to eq('application/json; charset=utf-8') }
     end
-    # context 'return the created instances' do
-    #   it { expect(response.body).to eq() }
-    # end
+    context 'return the created instances' do
+      it { expect(response.body).to eq([
+        {id: 1, name: 'Automóveis'}, 
+        {id: 2, name: 'Utensílios de Cozinha'}
+      ].to_json) }
+    end
   end
 
   describe "GET /show" do
-    let(:category) {create(:category)}
+    let(:category) {create(:category, id: 1, name: 'Roupas')}
 
     context 'id exists, so' do
       before do
@@ -42,9 +45,9 @@ RSpec.describe "Api::V1::Categories", type: :request do
       it 'return http status ok' do
         expect(response).to have_http_status(:ok)
       end
-      # it 'return the correct instance' do
-      #   expect(response.body).to eq()
-      # end
+      it 'return the correct instance' do
+        expect(response.body).to eq({id: 1, name: 'Roupas'}.to_json)
+      end
     end
 
     context "id doesn't exists, so return http status not_found" do
