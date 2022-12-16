@@ -11,7 +11,7 @@ class Api::V1::CategoriesController < ApplicationController
         category = Category.find(params[:id])
         render json: category, status: :ok
     rescue StandardError => e
-        render json: e, status: :bad_request
+        render json: e, status: :not_found
     end
 
     def create
@@ -33,9 +33,9 @@ class Api::V1::CategoriesController < ApplicationController
     def delete
         category = Category.find(params[:id])
         category.destroy!
-        render json: { message: "Categoria #{category.name} destruída com sucesso" }
+        render json: { message: "Categoria #{category.name} destruída com sucesso" }, status: :ok
     rescue StandardError => e
-        render json: e, status: :bad_request
+        render json: e, status: :not_found
     end
 
     private
