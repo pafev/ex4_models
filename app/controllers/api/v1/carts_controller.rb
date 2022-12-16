@@ -19,7 +19,7 @@ class Api::V1::CartsController < ApplicationController
     end
 
     def view
-        cart = current_user.cart
+        cart = Cart.find_by(user_id: current_user.id)
         render json: cart, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found

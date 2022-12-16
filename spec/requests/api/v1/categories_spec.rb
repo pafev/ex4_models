@@ -45,6 +45,9 @@ RSpec.describe "Api::V1::Categories", type: :request do
       it 'return http status ok' do
         expect(response).to have_http_status(:ok)
       end
+      it "return a json" do
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+      end
       it 'return the correct instance' do
         expect(response.body).to eq({id: 1, name: 'Roupas'}.to_json)
       end
@@ -98,6 +101,9 @@ RSpec.describe "Api::V1::Categories", type: :request do
       end
       it "return http status ok" do
         expect(response).to have_http_status(:ok)
+      end
+      it "update the instance correctly" do
+        expect(Category.find(category.id).name).to eq('Maquiagens')
       end
     end
 
