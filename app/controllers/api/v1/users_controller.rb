@@ -25,7 +25,7 @@ class Api::V1::UsersController < ApplicationController
             head(:unauthorized)
         end
     rescue StandardError => e
-        render json: e, status: :bad_request
+        render json: e, status: :unauthorized
     end
     
     def logout
