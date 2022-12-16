@@ -3,6 +3,6 @@ class Product < ApplicationRecord
   has_many :purchases, dependent: :destroy
   belongs_to :brand
   belongs_to :category
-  validates :name, :price, :stock_quantity, :description, presence: :true
+  validates :name, :price, :stock_quantity, presence: :true
   validates :name, uniqueness: :true
 end

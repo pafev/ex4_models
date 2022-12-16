@@ -27,9 +27,9 @@ RSpec.describe Product, type: :model do
     end
   end
 
-  context 'testing description' do
-    it "description shouldn't be nil" do
-      expect(build(:product, description: nil)).to be_invalid
-    end
-  end
+  # context 'testing description' do
+  #   it "description shouldn't be nil" do
+  #     expect(build(:product, description: nil)).to be_invalid
+  #   end
+  # end
 end
