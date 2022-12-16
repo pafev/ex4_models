@@ -25,6 +25,9 @@ RSpec.describe "Api::V1::Users", type: :request do
       it "return http status ok" do
         expect(response).to have_http_status(:ok)
       end
+      it "return a json" do
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+      end
     end
 
     context "user was logged in, but isn't admin, so" do
