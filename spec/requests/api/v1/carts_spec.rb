@@ -14,6 +14,7 @@ RSpec.describe "Api::V1::Carts", type: :request do
         expect(response).to have_http_status(:created)
       end
     end
+
     context "params aren't ok" do
       it "return http status bad_request" do
         post "/api/v1/carts/create", params: nil, headers: authentication_params
@@ -32,8 +33,8 @@ RSpec.describe "Api::V1::Carts", type: :request do
         expect(response).to have_http_status(:ok)
       end
       it "remove the instance correctly" do
-        delete "/api/v1/carts/delete/#{cart.id}", headers: authentication_params
-        expect(response).to have_http_status(:not_found)
+        get "/api/v1/carts/view", headers: authentication_params
+        expect(response.body).to eq((nil).to_json)
       end
     end
     context "id doesn't exist" do
@@ -41,6 +42,19 @@ RSpec.describe "Api::V1::Carts", type: :request do
         delete "/api/v1/carts/delete/-1", headers: authentication_params
         expect(response).to have_http_status(:not_found)
       end
+    end
+  end
+
+  describe "GET /view" do
+    let(:cart) {create(:cart, user_id: user.id)}
+    before do
+      get "/api/v1/carts/view", headers: authentication_params
+    end
+    context "return http status ok" do
+      it {expect(response).to have_http_status(:ok)}
+    end
+    context "return a json" do
+      it {expect(response.content_type).to eq('application/json; charset=utf-8')}
     end
   end
 end
