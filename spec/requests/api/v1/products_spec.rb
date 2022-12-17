@@ -33,6 +33,33 @@ RSpec.describe "Api::V1::Products", type: :request do
     # end
   end
 
+  describe "GET /index-category" do
+    context "category's id exists" do
+      let(:category) {create(:category)}
+      before do
+        # create(:brand)
+        # create(:product, id: 1, name: 'Galaxy A12', brand_id: brand.id, category_id: category.id)
+        # create(:product, id: 2, name: 'Moto G10', brand_id: brand.id, category_id: category.id)
+        get "/api/v1/products/index-category/#{category.id}"
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+      it "return a json" do
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+      end
+    end
+
+    context "category's id doesn't exist" do
+      before do
+        get "/api/v1/products/index-category/-1"
+      end
+      it "return http status not_found" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   describe "GET /show" do
     let(:product) {create(:product)}
     context "id exists" do

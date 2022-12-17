@@ -26,6 +26,7 @@ namespace "api" do
     scope "products" do
       get "index", to: "products#index"
       get "show/:id", to: "products#show"
+      get "index-category/:id", to: "products#index_per_category"
       post "create", to: "products#create"
       patch "update/:id", to: "products#update"
       patch "update-stock/:id", to: "products#update_stock_quantity"

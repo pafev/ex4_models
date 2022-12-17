@@ -1,10 +1,18 @@
 class Api::V1::ProductsController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:create, :update, :delete, :update_stock_quantity]
-    before_action :authentication_admin, except: [:index, :show, :update_stock_quantity]
+    acts_as_token_authentication_handler_for User, except: [:index, :show, :index_per_category]
+    before_action :authentication_admin, except: [:index, :show, :update_stock_quantity, :index_per_category]
 
     def index
         products = Product.all
         render json: products, status: :ok
+    end
+
+    def index_per_category
+        category = Category.find(params[:id])
+        products = category.products
+        render json: products, status: :ok
+    rescue StandardError => e
+        render json: e, status: :not_found
     end
 
     def show
