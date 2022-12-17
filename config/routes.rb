@@ -8,6 +8,7 @@ namespace "api" do
       get "logout", to: "users#logout"
       get "index", to: "users#index"
       post "create", to: "users#create"
+      patch "update", to: "users#update"
     end
     scope "categories" do
       get "index", to: "categories#index"

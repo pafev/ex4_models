@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:logout, :index]
+    acts_as_token_authentication_handler_for User, only: [:logout, :index, :update]
     before_action :authentication_admin, only: [:index]
 
     def index
@@ -13,6 +13,13 @@ class Api::V1::UsersController < ApplicationController
         cart = Cart.new(user_id: user.id)
         cart.save!
         render json: user, status: :created
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
+
+    def update
+        current_user.update!(user_params_update)
+        render json: current_user, status: :ok
     rescue StandardError => e
         render json: e, status: :bad_request
     end
@@ -40,5 +47,8 @@ class Api::V1::UsersController < ApplicationController
 
     def user_params
         params.require(:user).permit(:name, :email, :password, :is_admin, :authentication_token, :credit_wallet, :profile_picture)
+    end
+    def user_params_update
+        params.require(:user).permit(:name, :credit_wallet, :profile_picture)
     end
 end

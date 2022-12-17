@@ -16,8 +16,6 @@ RSpec.describe "Api::V1::Users", type: :request do
   }
 
   describe "GET /index" do
-    let (:user_admin) {create(:user, :admin, email: 'admin@paulo')}
-
     context "user was logged in and is admin, so" do
       before do
         get "/api/v1/users/index", headers: authentication_params_admin
@@ -64,7 +62,7 @@ RSpec.describe "Api::V1::Users", type: :request do
   describe "GET /logout" do
     context "user was logged in, so" do
       it "return http status ok" do
-        get "/api/v1/users/logout", headers: {'X-User-Email': user.email, 'X-User-Token': user.authentication_token}
+        get "/api/v1/users/logout", headers: authentication_params
         expect(response).to have_http_status(:ok)
       end
     end
@@ -82,6 +80,29 @@ RSpec.describe "Api::V1::Users", type: :request do
     context "params aren't ok" do
       it "return http status bad_request" do
         post "/api/v1/users/create", params: {user: nil}
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
+  describe "PATCH /udpate" do
+    context "params are ok" do
+      before do
+        patch "/api/v1/users/update", params: {user: {name: 'batatinha'}}, headers: authentication_params
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+      it "user was changed correctly" do
+        expect(User.find(user.id).name).to eq('batatinha')
+      end
+    end
+
+    context "params aren't ok" do
+      before do
+        patch "/api/v1/users/update", params: nil, headers: authentication_params
+      end
+      it "return http status bad_request" do
         expect(response).to have_http_status(:bad_request)
       end
     end
