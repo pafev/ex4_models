@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Products", type: :request do
-  let(:user) {create(:user, email: "batata@batata")}
+  let(:user) {create(:user)}
   let(:authentication_params) {{
     'X-User-Email': user.email,
     'X-User-Token': user.authentication_token
   }}
   
-  let(:user_admin) {create(:user, :admin, email: "admin@batata")}
+  let(:user_admin) {create(:user, :admin, email: "admin@batata", name: 'batatinha')}
   let(:authentication_params_admin) {{
     'X-User-Email': user_admin.email, 
     'X-User-Token': user_admin.authentication_token
@@ -49,6 +49,7 @@ RSpec.describe "Api::V1::Products", type: :request do
       #   expect(response.body).to eq()
       # end
     end
+
     context "id doesn't exist" do
       before do
         get "/api/v1/products/show/-1"
@@ -78,7 +79,7 @@ RSpec.describe "Api::V1::Products", type: :request do
       end
     end
 
-    context "params are ok, but user isn't admin" do
+    context "user isn't admin" do
       it "return http status unauthorized" do
         post "/api/v1/products/create", params: {product: product_params}, headers: authentication_params
         expect(response).to have_http_status(:unauthorized)
@@ -96,14 +97,14 @@ RSpec.describe "Api::V1::Products", type: :request do
   describe "PATCH /update" do
     let(:product) {create(:product)}
     let(:product_params) {{product: {name: "McLaren", price: 100000000, stock_quantity: 1}}}
-    context "id exists and params are ok" do
+    context "id exists, params are ok and user is admin" do
       it "return http status ok" do
         patch "/api/v1/products/update/#{product.id}", params: product_params, headers: authentication_params_admin
         expect(response).to have_http_status(:ok)
       end
     end
     
-    context "id exists and params aren't ok" do
+    context "params aren't ok" do
       it "return http status bad_request" do
         patch "/api/v1/products/update/#{product.id}", params: nil, headers: authentication_params_admin
         expect(response).to have_http_status(:bad_request)
@@ -125,9 +126,39 @@ RSpec.describe "Api::V1::Products", type: :request do
     end
   end
 
+  describe "PATCH /update-stock" do
+    let(:product) {create(:product)}
+    let(:product_params) {{product: {stock_quantity: 99999}}}
+    context "id exists and params are ok" do
+      before do
+        patch "/api/v1/products/update-stock/#{product.id}", params: product_params, headers: authentication_params
+      end
+      it "return http status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+      it "stock_quantity changed correctly" do
+        expect(Product.find(product.id).stock_quantity).to eq(99999)
+      end
+    end
+    
+    context "params aren't ok" do
+      it "return http status bad_request" do
+        patch "/api/v1/products/update-stock/#{product.id}", params: nil, headers: authentication_params
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "id doesn't exist" do
+      it "return http status bad_request" do
+        patch "/api/v1/products/update-stock/-1", params: product_params, headers: authentication_params
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+
   describe "DELETE /delete" do
     let(:product) {create(:product)}
-    context "id exists" do
+    context "id exists and user is admin" do
       before do
         delete "/api/v1/products/delete/#{product.id}", headers: authentication_params_admin
       end
@@ -135,8 +166,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         expect(response).to have_http_status(:ok)
       end
       it "remove correctly the instance" do
-        get "/api/v1/products/show/#{product.id}"
-        expect(response).to have_http_status(:not_found)
+        expect(Product.all.include?(product)).to be_falsey
       end
     end
 

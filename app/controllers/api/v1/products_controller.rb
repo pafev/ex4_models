@@ -1,6 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:create, :update, :delete]
-    before_action :authentication_admin, except: [:index, :show]
+    acts_as_token_authentication_handler_for User, only: [:create, :update, :delete, :update_stock_quantity]
+    before_action :authentication_admin, except: [:index, :show, :update_stock_quantity]
 
     def index
         products = Product.all
@@ -30,6 +30,14 @@ class Api::V1::ProductsController < ApplicationController
         render json: e, status: :bad_request
     end
 
+    def update_stock_quantity
+        product = Product.find(params[:id])
+        product.update!(product_params_stock_quantity)
+        render json: product, status: :ok
+    rescue StandardError => e
+        render json: e, status: :bad_request
+    end
+
     def delete
         product = Product.find(params[:id])
         product.destroy!
@@ -41,5 +49,8 @@ class Api::V1::ProductsController < ApplicationController
     private
     def product_params
         params.require(:product).permit(:name, :description, :price, :stock_quantity, :brand_id, :category_id, images: [])
+    end
+    def product_params_stock_quantity
+        params.require(:product).permit(:stock_quantity)
     end
 end
