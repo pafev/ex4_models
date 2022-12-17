@@ -21,7 +21,6 @@ class Api::V1::CartsController < ApplicationController
     def update_total_value
         cart = Cart.find_by(user_id: current_user.id)
         cart.update!(cart_params_update)
-        cart.save!
         render json: cart, status: :ok
     rescue StandardError => e
         render json: e, status: :bad_request
