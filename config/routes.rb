@@ -34,6 +34,7 @@ namespace "api" do
       post "create", to: "carts#create"
       delete "delete/:id", to: "carts#delete"
       get "view", to: "carts#view"
+      patch "update", to: "carts#update_total_value"
     end
   end
 end

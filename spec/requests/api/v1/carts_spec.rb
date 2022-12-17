@@ -80,11 +80,6 @@ RSpec.describe "Api::V1::Carts", type: :request do
     end
 
     # context "return the correct instance" do
-    #   # before do
-    #   #   p user.cart
-    #   #   p cart
-    #   #   p user
-    #   # end
     #   it {expect(response.body).to eq({
     #     id: cart.id,
     #     total_value: cart.total_value,
@@ -97,5 +92,30 @@ RSpec.describe "Api::V1::Carts", type: :request do
     #     }
     #   }.to_json)}
     # end
+  end
+
+  describe "PATCH /update_total_value" do
+    context "when user is logged in, has a cart and params are ok" do
+      it "return http status ok" do
+        create(:cart, user_id: user.id)
+        patch "/api/v1/carts/update", params: {cart: {total_value: 9999}}, headers: authentication_params
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "when user hasn't a cart" do
+      it "return http status bad_request" do
+        patch "/api/v1/carts/update", params: {cart: {total_value: 9999}}, headers: authentication_params
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "when params aren't ok" do
+      it "return http status bad_request" do
+        create(:cart, user_id: user.id)
+        patch "/api/v1/carts/update", params: nil, headers: authentication_params
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
   end
 end
