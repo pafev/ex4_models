@@ -6,5 +6,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
     has_one_attached :profile_picture
     has_one :cart, dependent: :destroy
+    has_many :addresses, dependent: :destroy
     validates :name, :email, presence: :true, uniqueness: :true
 end
