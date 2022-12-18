@@ -45,6 +45,12 @@ namespace "api" do
       post "create", to: "purchases#create"
       delete "delete/:id", to: "purchases#delete"
     end
+    scope "addresses" do
+      get "index", to: "addresses#index"
+      post "create", to: "addresses#create"
+      patch "update/:id", to: "addresses#update"
+      delete "delete/:id", to: "addresses#delete"
+    end
   end
 end
 end
