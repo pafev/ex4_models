@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2022_12_15_005811) do
   end
 
   create_table "carts", force: :cascade do |t|
-    t.integer "total_value", default: 0, null: false
+    t.integer "total_value"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -95,8 +95,8 @@ ActiveRecord::Schema.define(version: 2022_12_15_005811) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.integer "credit_wallet", default: 0, null: false
-    t.boolean "is_admin", default: false, null: false
+    t.integer "credit_wallet"
+    t.boolean "is_admin"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "email", default: "", null: false

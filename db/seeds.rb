@@ -31,3 +31,5 @@ Product.create!(name: 'iPhone 15', price: 9999999, stock_quantity: 1, brand_id: 
 
 User.create!(name: 'Paulo', email:'paulo@paulo', password: 'batata')
 User.create!(name: 'Paulão', email:'admin@paulo', password: 'cenoura', is_admin: true)
+
+Cart.create!(user_id: 1 )
