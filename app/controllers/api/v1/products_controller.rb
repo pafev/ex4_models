@@ -61,4 +61,6 @@ class Api::V1::ProductsController < ApplicationController
     def product_params_stock_quantity
         params.require(:product).permit(:stock_quantity)
     end
+
+    
 end
