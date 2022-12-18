@@ -1,10 +1,14 @@
 class Api::V1::UsersController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:logout, :index, :update]
+    acts_as_token_authentication_handler_for User, only: [:logout, :index, :update, :show]
     before_action :authentication_admin, only: [:index]
 
     def index
         users = User.all
         render json: users, status: :ok
+    end
+
+    def show
+        render json: current_user, status: :ok
     end
 
     def create
