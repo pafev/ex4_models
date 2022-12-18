@@ -7,6 +7,7 @@ namespace "api" do
       get "login", to: "users#login"
       get "logout", to: "users#logout"
       get "index", to: "users#index"
+      get "show", to: "users#show"
       post "create", to: "users#create"
       patch "update", to: "users#update"
     end
