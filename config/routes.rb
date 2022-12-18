@@ -39,6 +39,12 @@ namespace "api" do
       get "view", to: "carts#view"
       patch "update", to: "carts#update_total_value"
     end
+    scope "purchases" do
+      get "index", to: "purchases#index"
+      get "show/:id", to: "purchases#show"
+      post "create", to: "purchases#create"
+      delete "delete/:id", to: "purchases#delete"
+    end
   end
 end
 end
