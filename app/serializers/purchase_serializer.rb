@@ -1,17 +1,15 @@
 class PurchaseSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :product, :value, :cart_id
+  attributes :id, :cart_id, :product_data, :value
 end
-def product:
-  {name: object.product.name, stock: object.product.stock, category_id: object.product.category_id, brand_id: object.product.brand_id}
+
+def product_data
+  product_purchase = Product.find(product_id)
+  image = rails_blob_path(product_purchase.images[0], only_path: true) if product_purchase.images.attached?
+  {id: product_id, name: product_purchase.name, stock_quantity: product_purchase.stock_quantity, image_url: image }
 end
-def image_url:
-  firstImage = nil
-  if object.images.attached?
-    firstImage = rails_blob_path(object.images[0], only_path: true)
-  end
-  firstImage
+
+def value
+  product_purchase = Product.all.select { |product| product.id == product_id }
+  product_purchase[0].price
 end
-def value: 
-  {price: object.product.price,}
-end  
