@@ -27,8 +27,10 @@ namespace "api" do
     end
     scope "products" do
       get "index", to: "products#index"
+      get "index/page/:page/per_page/:per_page", to: "products#index_paginated"
       get "show/:id", to: "products#show"
       get "index-category/:id", to: "products#index_per_category"
+      get "index-category/:id/page/:page/per_page/:per_page", to: "products#index_category_paginated"
       post "create", to: "products#create"
       patch "update/:id", to: "products#update"
       patch "update-stock/:id", to: "products#update_stock_quantity"

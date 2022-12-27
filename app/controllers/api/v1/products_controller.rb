@@ -1,17 +1,34 @@
 class Api::V1::ProductsController < ApplicationController
-    acts_as_token_authentication_handler_for User, except: [:index, :show, :index_per_category]
-    before_action :authentication_admin, except: [:index, :show, :update_stock_quantity, :index_per_category]
+    acts_as_token_authentication_handler_for User, only: [:create, :update, :update_stock_quantity, :delete]
+    before_action :authentication_admin, only: [:create, :update, :delete]
 
     def index
         products = Product.all
         render json: products, status: :ok
     end
 
-    def index_per_category
-        category = Category.find(params[:id])
-        # products = category.products
-        products = Product.all.select { |product| product.category_id == category.id }
+    def index_paginated
+        page = params[:page].to_i
+        per_page = params[:per_page].to_i
+        offset = (page - 1) * per_page
+        products = Product.all.limit(per_page).offset(offset)
         render json: products, status: :ok
+    end
+
+    def index_per_category
+        products = Product.all.select { |product| product.category_id == params[:id].to_i }
+        render json: products, status: :ok
+    rescue StandardError => e
+        render json: e, status: :not_found
+    end
+
+    def index_category_paginated
+        page = params[:page].to_i
+        per_page = params[:per_page].to_i
+        offset = (page - 1) * per_page
+        products = Product.all.select { |product| product.category_id == params[:id].to_i }
+        products_paginated = products[offset, (offset + per_page)]
+        render json: products_paginated, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found
     end
