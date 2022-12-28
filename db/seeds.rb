@@ -29,7 +29,7 @@ Product.create!(name: 'Relógio Lacoste', price: 55000, stock_quantity: 13, bran
 Product.create!(name: 'Echo Dot Samsung', price: 69999, stock_quantity: 17, brand_id: 5, category_id: 2)
 Product.create!(name: 'iPhone 15', price: 9999999, stock_quantity: 1, brand_id: 2, category_id: 2)
 
-User.create!(name: 'Roberto', email:'paulo@paulo', password: 'batata')
+User.create!(name: 'Paulo', email:'paulo@paulo', password: 'batata')
 User.create!(name: 'Paulão', email:'admin@paulo', password: 'cenoura', is_admin: true)
 
 Cart.create!(user_id: 2)
