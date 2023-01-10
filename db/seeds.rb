@@ -190,7 +190,7 @@ filename: 'images (1).jpg')
 obj.images.attach(io: File.open('./public/assets/maçãwatch/images.jpg'),
 filename: 'images.jpg')
 
-obj = Product.create!(name: 'iCelular 14 versão limitada', price: 9999999, stock_quantity: 1, brand_id: 2, category_id: 2)
+obj = Product.create!(name: 'iCelular 14 versão limitada', price: 9999999, stock_quantity: 1, brand_id: 5, category_id: 4)
 obj.images.attach(io: File.open('./public/assets/iCelular/download (1).jpg'),
 filename: 'download (1).jpg')
 obj.images.attach(io: File.open('./public/assets/iCelular/download (2).jpg'),
