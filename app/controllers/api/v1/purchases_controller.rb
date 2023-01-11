@@ -30,10 +30,9 @@ class Api::V1::PurchasesController < ApplicationController
     def delete
         purchase = Purchase.find(params[:id])
         user_cart = Cart.find_by(user_id: current_user.id)
-        user_purchases = Purchase.all.select { |user_purchase| user_purchase.cart_id == user_cart.id }
-        if user_purchases.include?(purchase)
+        if purchase.cart_id == user_cart.id
             purchase.destroy!
-            render json: {message: "O a compra de id #{purchase.id} foi destruída com sucesso"}, status: :ok
+            render json: purchase, status: :ok
         else
             head(:bad_request)
         end

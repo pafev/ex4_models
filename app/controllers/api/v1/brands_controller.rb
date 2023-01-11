@@ -33,7 +33,7 @@ class Api::V1::BrandsController < ApplicationController
     def delete
         brand = Brand.find(params[:id])
         brand.destroy!
-        render json: {message: "Marca #{brand.name} destruída com sucesso!"}, status: :ok
+        render json: brand, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found
     end

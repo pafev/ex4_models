@@ -33,7 +33,7 @@ class Api::V1::CategoriesController < ApplicationController
     def delete
         category = Category.find(params[:id])
         category.destroy!
-        render json: { message: "Categoria #{category.name} destruída com sucesso" }, status: :ok
+        render json: category, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found
     end

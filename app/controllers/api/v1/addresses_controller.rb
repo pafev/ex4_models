@@ -32,7 +32,7 @@ class Api::V1::AddressesController < ApplicationController
         user_addresses = Address.all.select { |user_address| user_address.user_id == current_user.id }
         if user_addresses.include?(address)
             address.destroy!
-            render json: {message: "O endereço #{address.description} foi destruído com sucesso"}, status: :ok
+            render json: address, status: :ok
         else
             head(:bad_request)
         end

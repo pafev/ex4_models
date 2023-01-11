@@ -67,7 +67,7 @@ class Api::V1::ProductsController < ApplicationController
     def delete
         product = Product.find(params[:id])
         product.destroy!
-        render json: {message: "O produto #{product.name} foi destruído com sucesso"}, status: :ok
+        render json: product, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found
     end
