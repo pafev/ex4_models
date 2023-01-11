@@ -10,6 +10,7 @@ namespace "api" do
       get "show", to: "users#show"
       post "create", to: "users#create"
       patch "update", to: "users#update"
+      post "add-picture", to: "users#add_picture"
     end
     scope "categories" do
       get "index", to: "categories#index"

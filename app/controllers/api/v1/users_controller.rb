@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:logout, :index, :update, :show]
+    acts_as_token_authentication_handler_for User, only: [:logout, :index, :update, :show, :add_picture]
     before_action :authentication_admin, only: [:index]
 
     def index
@@ -26,6 +26,16 @@ class Api::V1::UsersController < ApplicationController
         render json: current_user, status: :ok
     rescue StandardError => e
         render json: e, status: :bad_request
+    end
+
+    def add_picture
+        if current_user.profile_picture.attached?
+            current_user.profile_picture.purge
+        end
+        params[:profile_picture].each do |profile_picture|
+            current_user.profile_picture.attach(profile_picture)
+        end
+        render json: current_user, status: :ok
     end
 
     def login   

@@ -8,7 +8,7 @@ class UserSerializer < ActiveModel::Serializer
     end
   end
   def addresses
-    array_sem_edit = Address.select { |user_address| user_address.user_id = object.id }
+    array_sem_edit = Address.select { |user_address| user_address.user_id == object.id }
     array_com_edit = []
     for address in array_sem_edit
       array_com_edit.push({id: address.id, description: address.description})
