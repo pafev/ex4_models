@@ -31,6 +31,7 @@ namespace "api" do
       get "index/page/:page/per_page/:per_page", to: "products#index_paginated"
       get "show/:id", to: "products#show"
       get "index-category/:id", to: "products#index_per_category"
+      get "index-brand/:id", to: "products#index_per_brand"
       get "index-category/:id/page/:page/per_page/:per_page", to: "products#index_category_paginated"
       post "create", to: "products#create"
       post "add-image/:id", to: "products#add_image"

@@ -22,6 +22,13 @@ class Api::V1::ProductsController < ApplicationController
         render json: e, status: :not_found
     end
 
+    def index_per_brand
+        products = Product.all.select { |product| product.brand_id == params[:id].to_i }
+        render json: products, status: :ok
+    rescue StandardError => e
+        render json: e, status: :not_found
+    end
+
     def index_category_paginated
         page = params[:page].to_i
         per_page = params[:per_page].to_i
