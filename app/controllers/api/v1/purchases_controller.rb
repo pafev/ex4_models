@@ -22,7 +22,7 @@ class Api::V1::PurchasesController < ApplicationController
         cart = Cart.find_by(user_id: current_user.id)
         purchase = Purchase.new(product_id: purchase_params_create[:product_id], cart_id: cart.id)
         purchase.save!
-        render json: Purchase.all, status: :created
+        render json: purchase, status: :created
     rescue StandardError => e
         render json: e, status: :bad_request
     end
