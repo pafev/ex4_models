@@ -1,6 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
-    acts_as_token_authentication_handler_for User, only: [:create, :update, :update_stock_quantity, :delete]
-    before_action :authentication_admin, only: [:create, :update, :delete]
+    acts_as_token_authentication_handler_for User, only: [:create, :update, :update_stock_quantity, :delete, :clear_images, :add_image]
+    before_action :authentication_admin, only: [:create, :update, :delete, :clear_images, :add_image]
 
     def index
         products = Product.all
@@ -70,6 +70,26 @@ class Api::V1::ProductsController < ApplicationController
         render json: product, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found
+    end
+
+    def clear_images
+        product = Product.find(params[:id])
+        if product.images.attached?
+            product.images.purge
+        end
+        render json: product, status: :ok
+    rescue StandardError => e
+        render json: e, status: :not_found
+    end
+
+    def add_image
+        product = Product.find(params[:id])
+        params[:images].each do |image|
+            product.images.attach(image)
+        end
+        render json: product, status: :ok
+    rescue StandardError => e
+        render json: e, status: :bad_request
     end
 
     private
