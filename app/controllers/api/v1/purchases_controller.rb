@@ -20,7 +20,8 @@ class Api::V1::PurchasesController < ApplicationController
 
     def create
         cart = Cart.find_by(user_id: current_user.id)
-        purchase = Purchase.new(product_id: purchase_params_create[:product_id], cart_id: cart.id)
+        purchase = Purchase.new(product_id: purchase_params_create[:product_id], cart_id: cart.id,
+                                quantity: purchase_params_create[:quantity])
         purchase.save!
         render json: purchase, status: :created
     rescue StandardError => e
@@ -42,6 +43,6 @@ class Api::V1::PurchasesController < ApplicationController
 
     private
     def purchase_params_create
-        object = params.require(:purchase).permit(:product_id)
+        object = params.require(:purchase).permit(:product_id, :quantity)
     end
 end
