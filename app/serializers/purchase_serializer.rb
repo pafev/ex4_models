@@ -1,6 +1,6 @@
 class PurchaseSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :cart_id, :product_data, :value
+  attributes :id, :cart_id, :product_data, :value, :quantity
 end
 
 def product_data
