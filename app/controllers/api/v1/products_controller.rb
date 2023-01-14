@@ -16,7 +16,8 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def index_per_category
-        products = Product.all.select { |product| product.category_id == params[:id].to_i }
+        category = Category.find(params[:id])
+        products = Product.all.select { |product| product.category_id == category.id }
         render json: products, status: :ok
     rescue StandardError => e
         render json: e, status: :not_found

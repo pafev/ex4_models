@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2023_01_13_080908) do
     t.bigint "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "quantity", default: 1, null: false
+    t.integer "quantity", default: 1
     t.index ["cart_id"], name: "index_purchases_on_cart_id"
     t.index ["product_id"], name: "index_purchases_on_product_id"
   end
